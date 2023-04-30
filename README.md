@@ -32,6 +32,11 @@
 $ npm install
 ```
 
+## Add .env file and fill db properies
+```bash
+$ cp .env.example .env
+```
+
 ## Running the app
 
 ```bash
