@@ -1,6 +1,5 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
-import { JwtService } from '@nestjs/jwt'import { throws } from 'assert';
-;
+import { Injectable, SetMetadata, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
 
 
@@ -8,20 +7,17 @@ import { UsersService } from 'src/users/users.service';
 export class AuthService {
   constructor(private userService: UsersService, private jwtService: JwtService) { }
 
-  async signIn(userName: string, pass: string): Promise<any> {
-    const user = await this.userService.findOne(userName);
-    if (user?.password !== pass) {
+  async signIn(email: string, pass: string) {
+    const user = await this.userService.findOne(email);
+    if (user.passHash !== pass) {
       throw new UnauthorizedException();
     }
     const payload = { username: user.name, sub: user.id }
+    return {
+      access_token: await this.jwtService.signAsync(payload)
+    }
   }
 
-  async compareHash(pass: string, email: string): Promise<bool> {
-    //TODO Retrieve password hash from db
-
-
-    //TODO Compare two hash and retrieve boolean
-
-
-  }
+  export const Public = () => SetMetadata(process.env.IS_PUBLIC, true);  
 }
+
