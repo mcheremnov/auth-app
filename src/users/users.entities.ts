@@ -9,7 +9,13 @@ export class User {
   firstName: string;
 
   @Column()
+  email: string;
+
+  @Column()
   lastName: string;
+
+  @Column()
+  passHash: string;
 
   @Column({ default: true })
   isActive: boolean;
